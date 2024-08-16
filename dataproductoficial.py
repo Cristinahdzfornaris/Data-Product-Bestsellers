@@ -68,7 +68,7 @@ st.markdown("""
 # Crear una función para cargar los datos
 @st.cache_data
 def cargar_datos(file_path):
-    datos = pd.read_csv(file_path, delimiter=';')
+    datos = pd.read_csv(file_path, delimiter=';',on_bad_lines='skip')
     datos['bestsellers_date'] = pd.to_datetime(datos['bestsellers_date'], format='%Y-%m-%d')
     datos['published_date'] = pd.to_datetime(datos['published_date'], format='%Y-%m-%d')
     datos['month'] = datos['bestsellers_date'].dt.month
