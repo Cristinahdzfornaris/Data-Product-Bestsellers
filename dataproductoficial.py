@@ -68,7 +68,8 @@ st.markdown("""
 # Crear una función para cargar los datos
 @st.cache_data
 def cargar_datos(file_path):
-    datos = pd.read_csv(file_path, delimiter=';',on_bad_lines='skip')
+    datos = pd.read_csv(file_path)
+    st.write(datos.columns)
     datos['bestsellers_date'] = pd.to_datetime(datos['bestsellers_date'], format='%Y-%m-%d')
     datos['published_date'] = pd.to_datetime(datos['published_date'], format='%Y-%m-%d')
     datos['month'] = datos['bestsellers_date'].dt.month
@@ -81,7 +82,7 @@ def cargar_datos(file_path):
     return datos
 
 # Cargar datos
-ruta= 'https://github.com/Cristinahdzfornaris/Data-Product-Bestsellers/blob/main/Datos/datos2013-2023.csv'
+ruta= 'Datos\datos2013-2023.csv'
 datos = cargar_datos(ruta)
 
 
