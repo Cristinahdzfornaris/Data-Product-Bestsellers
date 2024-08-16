@@ -81,7 +81,7 @@ def cargar_datos(file_path):
     return datos
 
 # Cargar datos
-ruta= 'Datos\datos2013-2023.csv'
+ruta= 'https://github.com/Cristinahdzfornaris/Data-Product-Bestsellers/blob/main/Datos/datos2013-2023.csv'
 datos = cargar_datos(ruta)
 
 
