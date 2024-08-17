@@ -140,10 +140,6 @@ with st.sidebar:
 if page=="Home":
     st.markdown('<div class="header">Página principal</div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
-    c1,c2,c3 = st.columns(3)
-    c1.button("Libros:books:",use_container_width=4,)
-    c2.button('Autores',use_container_width=4)
-    c3.button('Editoriales',use_container_width=4) 
     
     
     st.title("¡Explora el Mundo de los Libros Más Vendidos!")
