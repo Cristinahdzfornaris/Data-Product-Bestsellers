@@ -177,7 +177,7 @@ if page=="Home":
 
 if page == 'Libros' :
     
-    st.markdown('<div class="header">📚 Books Analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Book Analysis</div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
     st.markdown('<h2>Libros más vendidos</h2>', unsafe_allow_html=True)
     
@@ -203,7 +203,7 @@ if page == 'Libros' :
     st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == 'Autores':
-    st.markdown('<div class="header">📚 Books Analysis - Autores</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Book Analysis - Autores</div>', unsafe_allow_html=True)
     st.markdown('<div class="section ">', unsafe_allow_html=True)
     st.markdown('<h2>Autores más populares</h2>', unsafe_allow_html=True)
     c1,c4,c5=st.columns(3)
@@ -424,7 +424,7 @@ elif page == 'Autores':
     
 
 elif page == 'Editoriales':
-    st.markdown('<div class="header">📚 Books Analysis - Editoriales</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Book Analysis - Editoriales</div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
     st.markdown('<h2>Editoriales más populares</h2>', unsafe_allow_html=True)
     st.write('editoriales')
