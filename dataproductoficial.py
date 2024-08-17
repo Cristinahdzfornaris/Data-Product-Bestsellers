@@ -136,7 +136,7 @@ with st.sidebar:
     st.markdown('<div class="sidebar">', unsafe_allow_html=True)
     page = st.radio('Navegar a', ['Home','Libros', 'Autores', 'Editoriales', ], index=0)
     st.markdown('</div>', unsafe_allow_html=True)
-    c1,c2,c3 = st.columns(3)
+    
 if page=="Home":
     st.markdown('<div class="header">Página principal</div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
