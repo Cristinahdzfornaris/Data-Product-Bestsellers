@@ -6,6 +6,7 @@ from datetime import datetime
 import plotly.express as px
 import plotly.graph_objects as go
 import os
+from streamlit.components.v1 import html
 
 # Configurar estilos CSS
 st.markdown("""
@@ -64,7 +65,18 @@ st.markdown("""
         }
     </style>
 """, unsafe_allow_html=True)
+ga_code = """
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+"""
 
+html(ga_code, height=0)
 # Crear una función para cargar los datos
 @st.cache_data
 def cargar_datos(file_path):
