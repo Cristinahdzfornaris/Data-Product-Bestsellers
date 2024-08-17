@@ -66,13 +66,14 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 ga_code = """
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+
+  gtag('config', 'G-KYT9QJN6FW');
 </script>
 """
 
