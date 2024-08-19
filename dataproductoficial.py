@@ -206,222 +206,221 @@ elif page == 'Autores':
     st.markdown('<div class="header">📚 Book Analysis - Autores</div>', unsafe_allow_html=True)
     st.markdown('<div class="section ">', unsafe_allow_html=True)
     st.markdown('<h2>Autores más populares</h2>', unsafe_allow_html=True)
+    def mostrar_botones(botones):
+        st.session_state['botones']=botones
     c1,c4,c5=st.columns(3)
     c2,c3=st.columns(2)
-    if "libros1" not in st.session_state:
-        st.session_state.libros1= False
-    if c1.button('Libros por autor',use_container_width=3):
-        st.session_state.libros1=True
-    if st.session_state.libros1:
-        with st.spinner('cargando'):
-            st.markdown('<h2>Libros por autor</h2>', unsafe_allow_html=True)
-
-            titulos=sorted([author for author in datos['author'].unique() if isinstance(author, str)])
-
-            selec_authors=st.selectbox('Elige a un autor',titulos,index=None)
-            
-            years= datos['year'].unique()
-            selec_years=None
-            selec_month=None
-            if selec_authors:
-                if st.checkbox('Filtrar por año'):
-                    selec_years=st.multiselect('elige un ano',sorted(years),default=years)
-                    if selec_years:
-                        if st.checkbox('filtrar por mes'):
-                            selec_month=st.multiselect("elige un mes",["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
-            datos_filtrados=aplicar_filtros(datos,years=selec_years,mes=selec_month)
-            datos_filtrados=datos_filtrados[datos_filtrados['author']==selec_authors]
-            dataframe=datos_filtrados.drop(columns=['price','list_name_encoded'])
-            st.write(dataframe)
-            grafica=datos_filtrados.groupby(['month','year','list_name','rank','title']).size().reset_index(name='count').sort_values(by='count',ascending=False)
-           
-            mejores_libros(datos_filtrados,['month'],'libros más vendidos')
-            fig = px.scatter(grafica, x='count', y='list_name', title=f'Listas donde aparece {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
-            st.plotly_chart(fig)
-            fig = px.scatter(grafica, x='rank', y='title', title=f'rankink de los libros de {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
-            st.plotly_chart(fig)
     
-    if 'show_authors' not in st.session_state:
-        st.session_state.show_authors = False
-    
-    if c2.button('Comparar autores más populares por lista',use_container_width=6):
-        st.session_state.show_authors = True
-    
-    if st.session_state.show_authors:
-        with st.spinner('Cargando datos...'):
-            st.markdown('<h2>Comparar autores más populares por lista</h2>', unsafe_allow_html=True)
+    if c1.button('Libros por autor',use_container_width=3,on_click=mostrar_botones,args=('libros por autor',)):
+        pass
+    if c2.button('Comparar autores más populares por lista',use_container_width=6,on_click=mostrar_botones,args=('Comparar autores más populares por lista',)):
+        pass
+    if c3.button('Comparar autores por cantidad de bestsellers',use_container_width=4,on_click=mostrar_botones,args=("Comparar autores por cantidad de bestsellers",)):
+        pass
+    if c4.button("Autores frecuentes por lista",use_container_width=4,on_click=mostrar_botones,args=('Autores frecuentes por lista',)):
+        pass
+    if c5.button("Editoriales por autores",use_container_width=4,on_click=mostrar_botones,args=('Editoriales por autores',)):
+        pass
 
-            lista = st.selectbox('Selecciona la lista', (datos['list_name'].unique()))
-            filrados_datos = aplicar_filtros(datos, list=lista)
-            available_authors = (filrados_datos['author'].unique())
-            
-            varios_autores = st.multiselect('Selecciona los autores', available_authors)
+    if 'botones' in st.session_state:
+        if st.session_state.botones=='libros por autor':
+            with st.spinner('cargando'):
+                st.markdown('<h2>Libros por autor</h2>', unsafe_allow_html=True)
 
-            if varios_autores:
-                filrados_datos = aplicar_filtros(datos, list=lista, autor=varios_autores)
+                titulos=sorted([author for author in datos['author'].unique() if isinstance(author, str)])
+
+                selec_authors=st.selectbox('Elige a un autor',titulos,index=None)
                 
-                grouped_data = filrados_datos.groupby(['year', 'author']).size().reset_index(name='count').sort_values(by='count' ,ascending=False)
-                
-                fig = px.bar(
-                    grouped_data, 
-                    x='year', 
-                    y='count', 
-                    color='author',
-                    barmode='group',
-                    title='Número de Bestsellers por Autor y Año'
-                )
-                fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
+                years= datos['year'].unique()
+                selec_years=None
+                selec_month=None
+                if selec_authors:
+                    if st.checkbox('Filtrar por año'):
+                        selec_years=st.multiselect('elige un ano',sorted(years),default=years)
+                        if selec_years:
+                            if st.checkbox('filtrar por mes'):
+                                selec_month=st.multiselect("elige un mes",["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
+                datos_filtrados=aplicar_filtros(datos,years=selec_years,mes=selec_month)
+                datos_filtrados=datos_filtrados[datos_filtrados['author']==selec_authors]
+                dataframe=datos_filtrados.drop(columns=['price','list_name_encoded'])
+                st.write(dataframe)
+                grafica=datos_filtrados.groupby(['month','year','list_name','rank','title']).size().reset_index(name='count').sort_values(by='count',ascending=False)
+            
+                mejores_libros(datos_filtrados,['month'],'libros más vendidos')
+                fig = px.scatter(grafica, x='count', y='list_name', title=f'Listas donde aparece {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
                 st.plotly_chart(fig)
-                st.write(filrados_datos)
-            else:
-                st.write("Selecciona al menos un autor.")
-            st.markdown('<div class="section">', unsafe_allow_html=True)
+                fig = px.scatter(grafica, x='rank', y='title', title=f'rankink de los libros de {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
+                st.plotly_chart(fig)
+                st.markdown('<div class="section ">', unsafe_allow_html=True)
     
-   
-    
-    if 'compararbestsellers' not in st.session_state:
-        st.session_state.compararbestsellers=False
-    if c3.button('Comparar autores por cantidad de bestsellers',use_container_width=4):
-        st.session_state.compararbestsellers=True
-    if st.session_state.compararbestsellers:
-        with st.spinner('cargando....'):
-    # Filtros adicionales
-            
-            st.markdown('<h2>Comparar autores por cantidad de bestsellers</h2>', unsafe_allow_html=True)
-            
-            
-            autores_disponibles_c3 = sorted([autor for autor in datos['author'].unique() if isinstance(autor, str)])
-            filtro_autor = st.multiselect('Selecciona los autores', autores_disponibles_c3,help="Puede seleccionar más de uno")
-            filtro_year= None
-            filtro_mes=None
-            if filtro_autor:
-                if st.checkbox('Filtrar por años'):
-                    filtro_year = st.multiselect("Elige uno o más años", sorted([year for year in datos['year'].unique() if pd.notna(year)]),key='hola')
-                    if st.checkbox('Filtrar por mes'):
-                    
-                        filtro_mes = st.multiselect("Elige uno o más meses", ["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
+        elif st.session_state.botones=='Comparar autores más populares por lista':
+        
 
-            if st.button(':green[Mostrar resultados]'):
-                filtered_data = aplicar_filtros(datos, years=filtro_year, mes=filtro_mes, autor=filtro_autor)
+            with st.spinner('Cargando datos...'):
+                st.markdown('<h2>Comparar autores más populares por lista</h2>', unsafe_allow_html=True)
+
+                lista = st.selectbox('Selecciona la lista', (datos['list_name'].unique()))
+                filrados_datos = aplicar_filtros(datos, list=lista)
+                available_authors = (filrados_datos['author'].unique())
+                
+                varios_autores = st.multiselect('Selecciona los autores', available_authors)
+
+                if varios_autores:
+                    filrados_datos = aplicar_filtros(datos, list=lista, autor=varios_autores)
                     
-                if not filtered_data.empty:
-                    grouped_data = filtered_data.groupby(['year', 'author']).size().reset_index(name='count')
+                    grouped_data = filrados_datos.groupby(['year', 'author']).size().reset_index(name='count').sort_values(by='count' ,ascending=False)
+                    
                     fig = px.bar(
                         grouped_data, 
                         x='year', 
                         y='count', 
                         color='author',
                         barmode='group',
-                        title='Número de Bestsellers por Autor y Año (Filtro Adicional)'
+                        title='Número de Bestsellers por Autor y Año'
                     )
-                    
                     fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
                     st.plotly_chart(fig)
-                    st.write(filtered_data.drop(columns=['price','list_name_encoded']))
+                    st.write(filrados_datos)
                 else:
-                    st.warning("No hay datos disponibles para los filtros seleccionados.")
+                    st.write("Selecciona al menos un autor.")
                 st.markdown('<div class="section">', unsafe_allow_html=True)
-    if "freclistas" not in st.session_state:
-        st.session_state.freclistas=False
-    if c4.button("Autores frecuentes por lista",use_container_width=4):
-        st.session_state.freclistas=True
-    if st.session_state.freclistas:
-        with st.spinner("Cargando..."):
-            st.markdown('<h2>Autores frecuentes por listas</h2>', unsafe_allow_html=True)
-
-            years_multiselect= st.multiselect("Elige uno o más años", sorted([year for year in datos['year'].unique() if pd.notna(year)]),key="diferente")
-            mes_multi = None
-            if years_multiselect:
-                if st.checkbox('Filtrar por mes'):
-                    mes_multi = st.multiselect("Elige un mes", ["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
-
-            selec_list = st.selectbox('Selecciona la lista', sorted(datos['list_name'].unique()))
-
-            datos_filtrados = aplicar_filtros(datos, list=selec_list, years=years_multiselect, mes=mes_multi)
-            
-            if not datos_filtrados.empty:
-                grouped_data = datos_filtrados.groupby([ 'author']).size().reset_index(name='count').head(10)
-                top_authors = grouped_data.sort_values(by='count', ascending=False).head(10)
-                fig = px.bar(
-                    grouped_data, 
-                    x='author', 
-                    y='count', 
-                    color='author',
-                    barmode='group',
-                    
-                    title='Autores con más Bestsellers por Año'
-                )
-                fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
-                # st.plotly_chart(fig)
-                
-                fig = px.pie(
-                        top_authors, 
-                        values='count', 
-                        names='author', 
-                        title='Proporción de Bestsellers por Autor',
-                        color_discrete_sequence=px.colors.sequential.RdBu
-                    )
-                st.plotly_chart(fig)
-                dataframe=datos_filtrados.drop(columns=['price',"list_name_encoded"])
-                st.write(dataframe)
-
-            else:
-                    st.error("No hay datos disponibles para los filtros seleccionados.")
-            st.markdown('<div class="section">', unsafe_allow_html=True)
-    if "boton" not in st.session_state:
-        st.session_state.boton=False
-    if c5.button("Editoriales por autores",use_container_width=4):
-        st.session_state.boton=True
-    if st.session_state.boton:
-        with st.spinner("Cargando..."):
-            
-            st.markdown('<h2>Editoriales por autores</h2>', unsafe_allow_html=True)
-
-            autores_disponibles = sorted([autor for autor in datos['author'].unique() if isinstance(autor, str)])
-            
-
-            autores = st.selectbox('Selecciona los autores', autores_disponibles,key='MaS')
-            
-
-            
-            if autores:
-                author_data = datos[datos['author'] == autores]
-                
-                
-                editorials_by_year = author_data.groupby(['year', 'publisher'])['title'].nunique().reset_index(name='count')
-
-                if not editorials_by_year.empty:
-                    fig = px.bar(
-                        editorials_by_year,
-                        x='year',
-                        y='count',
-                        color='publisher',
-                    
-                        title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
-                        barmode='stack'
-                    )
-                    fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
-                    st.plotly_chart(fig)
-                    fig = px.area(
-                        editorials_by_year,
-                        x='year',
-                        y='count',
-                        color='publisher',
-                        title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
-                        labels={'count': 'Número de Publicaciones', 'publisher': 'Editorial'},
-                        
-                        
-                    )
-                    fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
-                    st.plotly_chart(fig)
-
-                else:
-                    st.write(f"No se encontraron datos de publicaciones para {autores}.")
                 st.markdown('<div class="section ">', unsafe_allow_html=True)
-                st.markdown('</div>', unsafe_allow_html=True)
-                            
         
     
+        
+        elif st.session_state.botones=='Comparar autores por cantidad de bestsellers':
+            with st.spinner('cargando....'):
+        # Filtros adicionales
+                
+                st.markdown('<h2>Comparar autores por cantidad de bestsellers</h2>', unsafe_allow_html=True)
+                
+                
+                autores_disponibles_c3 = sorted([autor for autor in datos['author'].unique() if isinstance(autor, str)])
+                filtro_autor = st.multiselect('Selecciona los autores', autores_disponibles_c3,help="Puede seleccionar más de uno")
+                filtro_year= None
+                filtro_mes=None
+                if filtro_autor:
+                    if st.checkbox('Filtrar por años'):
+                        filtro_year = st.multiselect("Elige uno o más años", sorted([year for year in datos['year'].unique() if pd.notna(year)]),key='hola')
+                        if st.checkbox('Filtrar por mes'):
+                        
+                            filtro_mes = st.multiselect("Elige uno o más meses", ["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
+
+                if st.button(':green[Mostrar resultados]'):
+
+                    filtered_data = aplicar_filtros(datos, years=filtro_year, mes=filtro_mes, autor=filtro_autor)
+                        
+                    if not filtered_data.empty:
+                        grouped_data = filtered_data.groupby(['year', 'author']).size().reset_index(name='count')
+                        fig = px.bar(
+                            grouped_data, 
+                            x='year', 
+                            y='count', 
+                            color='author',
+                            barmode='group',
+                            title='Número de Bestsellers por Autor y Año (Filtro Adicional)'
+                        )
+                        
+                        fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
+                        st.plotly_chart(fig)
+                        st.write(filtered_data.drop(columns=['price','list_name_encoded']))
+                    else:
+                        st.warning("No hay datos disponibles para los filtros seleccionados.")
+                    st.markdown('<div class="section">', unsafe_allow_html=True)
+        elif st.session_state.botones=='Autores frecuentes por lista':
+            with st.spinner("Cargando..."):
+                st.markdown('<h2>Autores frecuentes por listas</h2>', unsafe_allow_html=True)
+
+                years_multiselect= st.multiselect("Elige uno o más años", sorted([year for year in datos['year'].unique() if pd.notna(year)]),key="diferente")
+                mes_multi = None
+                if years_multiselect:
+                    if st.checkbox('Filtrar por mes'):
+                        mes_multi = st.multiselect("Elige un mes", ["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
+
+                selec_list = st.selectbox('Selecciona la lista', sorted(datos['list_name'].unique()))
+
+                datos_filtrados = aplicar_filtros(datos, list=selec_list, years=years_multiselect, mes=mes_multi)
+                
+                if not datos_filtrados.empty:
+                    grouped_data = datos_filtrados.groupby([ 'author']).size().reset_index(name='count').head(10)
+                    top_authors = grouped_data.sort_values(by='count', ascending=False).head(10)
+                    fig = px.bar(
+                        grouped_data, 
+                        x='author', 
+                        y='count', 
+                        color='author',
+                        barmode='group',
+                        
+                        title='Autores con más Bestsellers por Año'
+                    )
+                    fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
+                    # st.plotly_chart(fig)
+                    
+                    fig = px.pie(
+                            top_authors, 
+                            values='count', 
+                            names='author', 
+                            title='Proporción de Bestsellers por Autor',
+                            color_discrete_sequence=px.colors.sequential.RdBu
+                        )
+                    st.plotly_chart(fig)
+                    dataframe=datos_filtrados.drop(columns=['price',"list_name_encoded"])
+                    st.write(dataframe)
+
+                else:
+                        st.error("No hay datos disponibles para los filtros seleccionados.")
+                st.markdown('<div class="section">', unsafe_allow_html=True)
+        elif st.session_state.botones=="Editoriales por autores":
+            with st.spinner("Cargando..."):
+                
+                st.markdown('<h2>Editoriales por autores</h2>', unsafe_allow_html=True)
+
+                autores_disponibles = sorted([autor for autor in datos['author'].unique() if isinstance(autor, str)])
+                
+
+                autores = st.selectbox('Selecciona los autores', autores_disponibles,key='MaS')
+                
+
+                
+                if autores:
+                    author_data = datos[datos['author'] == autores]
+                    
+                    
+                    editorials_by_year = author_data.groupby(['year', 'publisher'])['title'].nunique().reset_index(name='count')
+
+                    if not editorials_by_year.empty:
+                        fig = px.bar(
+                            editorials_by_year,
+                            x='year',
+                            y='count',
+                            color='publisher',
+                        
+                            title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
+                            barmode='stack'
+                        )
+                        fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
+                        st.plotly_chart(fig)
+                        fig = px.area(
+                            editorials_by_year,
+                            x='year',
+                            y='count',
+                            color='publisher',
+                            title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
+                            labels={'count': 'Número de Publicaciones', 'publisher': 'Editorial'},
+                            
+                            
+                        )
+                        fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
+                        st.plotly_chart(fig)
+
+                    else:
+                        st.write(f"No se encontraron datos de publicaciones para {autores}.")
+                    st.markdown('<div class="section ">', unsafe_allow_html=True)
+                    st.markdown('</div>', unsafe_allow_html=True)
+                    st.markdown('<div class="section ">', unsafe_allow_html=True)
+                                
+            
+        
 
 elif page == 'Editoriales':
     st.markdown('<div class="header">📚 Book Analysis - Editoriales</div>', unsafe_allow_html=True)
@@ -459,4 +458,3 @@ elif page == 'Editoriales':
     fig = px.scatter(editoriales_filtradas, x='rank', y='title', title=f'Posiciones en listas para {publisher}', labels={'rank': 'Ranking', 'title': 'Título'})
     st.plotly_chart(fig)
     st.markdown('</div>', unsafe_allow_html=True)
-
