@@ -417,7 +417,7 @@ elif page == 'Autores':
                         st.write(f"No se encontraron datos de publicaciones para {autores}.")
                     st.markdown('<div class="section ">', unsafe_allow_html=True)
                     st.markdown('</div>', unsafe_allow_html=True)
-                    st.markdown('<div class="section ">', unsafe_allow_html=True)
+                    
                                 
             
         
