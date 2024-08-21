@@ -7,19 +7,27 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 from streamlit.components.v1 import html
-ga_code = """
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+import streamlit as st
+from streamlit_javascript import st_javascript
 
-  gtag('config', 'G-KYT9QJN6FW');
-</script>
+# Inserta tu Measurement ID aquí
+GA_MEASUREMENT_ID = 'G-KYT9QJN6FW'
+
+# Código de Google Analytics
+ga_script = f"""
+(function(i,s,o,g,r,a,m){{i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){{
+(i[r].q=i[r].q||[]).push(arguments)}},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+}})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', '{GA_MEASUREMENT_ID}', 'auto');
+ga('send', 'pageview');
 """
 
-html(ga_code, height=0)
+
+# Ejecuta el código JavaScript en el navegador
+st_javascript(ga_script)
+
+# Resto de tu aplicación Streamlit
 # Configurar estilos CSS
 st.markdown("""
     <style>
