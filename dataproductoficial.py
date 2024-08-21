@@ -177,7 +177,7 @@ if page=="Home":
 
 if page == 'Libros' :
     
-    st.markdown('<div class="header">📚 Book Analysis</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Libros </div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
     st.markdown('<h2>Libros más vendidos</h2>', unsafe_allow_html=True)
     
@@ -203,7 +203,7 @@ if page == 'Libros' :
     st.markdown('</div>', unsafe_allow_html=True)
 
 elif page == 'Autores':
-    st.markdown('<div class="header">📚 Book Analysis - Autores</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Autores</div>', unsafe_allow_html=True)
     st.markdown('<div class="section ">', unsafe_allow_html=True)
     st.markdown('<h2>Autores más populares</h2>', unsafe_allow_html=True)
     def mostrar_botones(botones):
@@ -242,15 +242,24 @@ elif page == 'Autores':
                                 selec_month=st.multiselect("elige un mes",["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
                 datos_filtrados=aplicar_filtros(datos,years=selec_years,mes=selec_month)
                 datos_filtrados=datos_filtrados[datos_filtrados['author']==selec_authors]
-                dataframe=datos_filtrados.drop(columns=['price','list_name_encoded'])
-                st.write(dataframe)
-                grafica=datos_filtrados.groupby(['month','year','list_name','rank','title']).size().reset_index(name='count').sort_values(by='count',ascending=False)
-            
-                mejores_libros(datos_filtrados,['month'],'libros más vendidos')
-                fig = px.scatter(grafica, x='count', y='list_name', title=f'Listas donde aparece {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
-                st.plotly_chart(fig)
-                fig = px.scatter(grafica, x='rank', y='title', title=f'rankink de los libros de {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
-                st.plotly_chart(fig)
+                if selec_authors:
+                    if not datos_filtrados.empty:
+                        dataframe=datos_filtrados.drop(columns=['price','list_name_encoded'])
+                        st.write(dataframe)
+
+                        grafica=datos_filtrados.groupby(['year','rank','title']).size().reset_index(name='count').sort_values(by='count',ascending=False)
+                        grafica1=datos_filtrados.groupby(['list_name']).size().reset_index(name='count').sort_values(by='count',ascending=False)
+                        st.write(grafica1)
+                        mejores_libros(datos_filtrados,['month'],'libros más vendidos')
+                        fig=px.bar(grafica,x='title',y="count",title="libros más vendidos",color="title")
+                        st.plotly_chart(fig)
+                        fig = px.scatter(grafica1, x='count', y='list_name', title=f'Listas donde aparece {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
+                        st.plotly_chart(fig)
+                        fig = px.scatter(grafica, x='rank', y='title', title=f'rankink de los libros de {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
+                        st.plotly_chart(fig)
+                    
+                    else:
+                        st.warning("No hay datos disponibles para estos filtros")
                 st.markdown('<div class="section ">', unsafe_allow_html=True)
     
         elif st.session_state.botones=='Comparar autores más populares por lista':
@@ -423,38 +432,50 @@ elif page == 'Autores':
         
 
 elif page == 'Editoriales':
-    st.markdown('<div class="header">📚 Book Analysis - Editoriales</div>', unsafe_allow_html=True)
+    st.markdown('<div class="header">📚 Editoriales</div>', unsafe_allow_html=True)
     st.markdown('<div class="section">', unsafe_allow_html=True)
     st.markdown('<h2>Editoriales más populares</h2>', unsafe_allow_html=True)
-    st.write('editoriales')
     listas= datos['list_name'].unique()
     editoriales=datos['publisher'].unique()
-    publisher=st.selectbox('selecciona una editorial',editoriales)
-    editoriales_filtradas=datos[datos['publisher']==publisher]
-    editorialgrafica=editoriales_filtradas.groupby(['year',"list_name"]).size().reset_index(name='count')
+    
+    def elegir(seccion):
+        st.session_state["edi"]=seccion
+    c1,c2=st.columns(2)
+    if  c1.button('Análisis por editorial',on_click=elegir,args=('Analisis',)):
+            pass
+    if c2.button('Cantidad de editoriales por listas',on_click=elegir,args=("Cantidad",)):
+            pass
+    if "edi" in st.session_state:
+        if st.session_state.edi=="Analisis":
+            publisher=st.selectbox('selecciona una editorial',editoriales)
+            editoriales_filtradas=datos[datos['publisher']==publisher]
+            st.write(editoriales_filtradas.drop(columns=["price","list_name_encoded"]))
+            editorialgrafica=editoriales_filtradas.groupby(['year',"list_name"]).size().reset_index(name='count')
+            fig = px.bar(
+            editorialgrafica, 
+            x='year', 
+            y='count', 
+            color='list_name',
+            title=f'Apariciones de {publisher} en diferentes listas a lo largo del tiempo',
+            labels={'count': 'Número de Apariciones', 'list_name': 'Lista', 'year': 'Año'},
+            barmode='stack')
+            st.plotly_chart(fig)
+            success_by_list = editoriales_filtradas.groupby(['list_name']).size().reset_index(name='count')
+    
+            fig = px.bar(success_by_list, x='list_name', y='count', color='list_name', title=f'Éxito por Lista de {publisher}',height=700,width=700)
+            st.plotly_chart(fig)
+            
+            fig = px.scatter(editoriales_filtradas, x='rank', y='list_name', title=f'Posiciones en listas para {publisher}', labels={'rank': 'Ranking', 'list_name': 'Listas'},height=600)
+            st.plotly_chart(fig)
+            
+            st.markdown('<div class="section">', unsafe_allow_html=True)
+        elif st.session_state.edi=="Cantidad":
+            listas_selct=st.selectbox('elige una lista',listas)
+            edi_data= datos[datos['list_name']==listas_selct]
+            publishers_count = edi_data['publisher'].value_counts().reset_index()
+            publishers_count.columns = ['publisher', 'count']
 
-
-   
-
-    fig = px.bar(
-    editorialgrafica, 
-    x='year', 
-    y='count', 
-    color='list_name',
-    title=f'Apariciones de {publisher} en diferentes listas a lo largo del tiempo',
-    labels={'count': 'Número de Apariciones', 'list_name': 'Lista', 'year': 'Año'},
-    barmode='stack')
-    st.plotly_chart(fig)
-    success_by_list = editoriales_filtradas.groupby(['list_name']).size().reset_index(name='count')
-    fig = px.bar(success_by_list, x='list_name', y='count', color='list_name', title=f'Éxito por Lista de {publisher}')
-    st.plotly_chart(fig)
-    listas_selct=st.selectbox('elige una lista',listas)
-
-    edi_data= datos[datos['list_name']==listas_selct]
-    publishers_count = edi_data['publisher'].value_counts().reset_index()
-    publishers_count.columns = ['publisher', 'count']
-    fig = px.bar(publishers_count.head(10), x='publisher', y='count', title=f'Editoriales con más libros en la lista {listas_selct}')
-    st.plotly_chart(fig)
-    fig = px.scatter(editoriales_filtradas, x='rank', y='title', title=f'Posiciones en listas para {publisher}', labels={'rank': 'Ranking', 'title': 'Título'})
-    st.plotly_chart(fig)
-    st.markdown('</div>', unsafe_allow_html=True)
+            fig = px.bar(publishers_count.head(10), x='publisher', y='count', title=f'Editoriales con más libros en la lista {listas_selct}')
+            st.plotly_chart(fig)
+            st.markdown('<div class="section">', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
