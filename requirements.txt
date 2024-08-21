@@ -3,4 +3,4 @@ streamlit
 pandas
 matplotlib
 plotly
-st_javascript
+treamlit_javascript
