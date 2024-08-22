@@ -4,3 +4,4 @@ pandas
 matplotlib
 plotly
 streamlit_javascript
+streamlit_analytics
