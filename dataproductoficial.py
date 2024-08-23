@@ -10,17 +10,22 @@ from streamlit.components.v1 import html
 # from bs4 import BeautifulSoup
 from streamlit_javascript import st_javascript
 
-# google_analytics_code = """
-# <!-- Google tag (gtag.js) -->
-# <script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
-# <script>
-#   window.dataLayer = window.dataLayer || [];
-#   function gtag(){dataLayer.push(arguments);}
-#   gtag('js', new Date());
+google_analytics_code = """
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-#   gtag('config', 'G-KYT9QJN6FW');
-# </script>
-# """
+  gtag('config', 'G-KYT9QJN6FW');
+</script>
+"""
+
+html(google_analytics_code)
+
+
+
 
 
 # Configurar estilos CSS
