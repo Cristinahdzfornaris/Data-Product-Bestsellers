@@ -22,7 +22,7 @@ google_analytics_code = """
 </script>
 """
 
-html(google_analytics_code)
+html(google_analytics_code, height=0, width=0)
 
 
 # Configurar estilos CSS
