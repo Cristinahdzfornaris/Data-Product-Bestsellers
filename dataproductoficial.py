@@ -7,22 +7,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 from streamlit.components.v1 import html
-
+from streamlit_analytics import st_analytics
 from streamlit_javascript import st_javascript
 
-google_analytics_code = """
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-KYT9QJN6FW');
-</script>
-"""
-
-html(google_analytics_code, height=0, width=0)
 
 
 # Configurar estilos CSS
@@ -83,6 +70,22 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+def insert_google_analytics():
+        ga_script = """
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KYT9QJN6FW"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-KYT9QJN6FW');
+    </script>
+        """
+        st_javascript(ga_script)
+
+# Llamar a la función para insertar el script
+insert_google_analytics()
 # Crear una función para cargar los datos
 @st.cache_data
 def cargar_datos(file_path):
