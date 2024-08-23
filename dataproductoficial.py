@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 from streamlit.components.v1 import html
-from bs4 import BeautifulSoup
+
 from streamlit_javascript import st_javascript
 
 google_analytics_code = """
@@ -22,27 +22,7 @@ google_analytics_code = """
 </script>
 """
 
-
-
-
-def inject_ga():
-    # Obtener la ruta al archivo 'index.html' de Streamlit
-    index_path = os.path.join(os.path.dirname(st.__file__), 'static', 'index.html')
-    
-    # Leer el archivo HTML
-    with open(index_path, 'r', encoding='utf-8') as file:
-        soup = BeautifulSoup(file, 'lxml')
-    
-    # Convertir el objeto soup a cadena y agregar el código de GA
-    html = str(soup)
-    new_html = html.replace('<head>', '<head>\n' + google_analytics_code)
-    
-    # Escribir el HTML modificado de nuevo en el archivo
-    with open(index_path, 'w', encoding='utf-8') as file:
-        file.write(new_html)
-
-# Ejemplo de uso:
-inject_ga()
+html(google_analytics_code)
 
 
 # Configurar estilos CSS
