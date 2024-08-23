@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 from streamlit.components.v1 import html
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from streamlit_javascript import st_javascript
 
 # google_analytics_code = """
