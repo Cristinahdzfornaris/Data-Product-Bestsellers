@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import os
 from streamlit.components.v1 import html
-from streamlit_analytics import st_analytics
+
 from streamlit_javascript import st_javascript
 
 
