@@ -6,3 +6,4 @@ plotly
 streamlit_javascript
 streamlit_analytics
 beautifulsoup4
+lxml
