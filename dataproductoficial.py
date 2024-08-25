@@ -190,7 +190,7 @@ if page == 'Libros' :
     st.markdown('<h2>Libros más vendidos</h2>', unsafe_allow_html=True)
     
     libros = sorted(datos["year"].unique())
-    years_seleccionado = st.multiselect("Elige uno o más años", libros, default=libros)
+    years_seleccionado = st.multiselect("Elige uno o más años", libros)
     mes = None
     if years_seleccionado:
         if st.checkbox('Filtrar por mes'):
@@ -359,7 +359,7 @@ elif page == 'Autores':
                 datos_filtrados = aplicar_filtros(datos, list=selec_list, years=years_multiselect, mes=mes_multi)
                 
                 if not datos_filtrados.empty:
-                    grouped_data = datos_filtrados.groupby([ 'author']).size().reset_index(name='count').head(10)
+                    grouped_data = datos_filtrados.groupby([ 'author']).size().reset_index(name='count')
                     top_authors = grouped_data.sort_values(by='count', ascending=False).head(10)
                     fig = px.bar(
                         grouped_data, 
