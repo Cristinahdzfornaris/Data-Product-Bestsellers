@@ -11,7 +11,7 @@ import streamlit_analytics
 from streamlit_javascript import st_javascript
 
 
-with streamlit_analytics.track(save_to_json="Datos/analíticas.json"):
+with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
 # Configurar estilos CSS
     st.markdown("""
         <style>
