@@ -237,17 +237,18 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
 
                     titulos=sorted([author for author in datos['author'].unique() if isinstance(author, str)])
 
-                    selec_authors=st.selectbox('Elige a un autor',titulos,index=None)
+                    selec_authors=st.selectbox("Elige a un autor",titulos,index=0)
                     
                     years= datos['year'].unique()
                     selec_years=None
                     selec_month=None
                     if selec_authors:
                         if st.checkbox('Filtrar por año'):
-                            selec_years=st.multiselect('elige un ano',sorted(years),default=years)
+                            selec_years=st.multiselect('elige un año',sorted(years),default=years)
                             if selec_years:
                                 if st.checkbox('filtrar por mes'):
                                     selec_month=st.multiselect("elige un mes",["Enero", 'Febrero', "Marzo", 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'])
+                    
                     datos_filtrados=aplicar_filtros(datos,years=selec_years,mes=selec_month)
                     datos_filtrados=datos_filtrados[datos_filtrados['author']==selec_authors]
                     if selec_authors:
@@ -268,6 +269,7 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                         
                         else:
                             st.warning("No hay datos disponibles para estos filtros")
+                    
                     st.markdown('<div class="section ">', unsafe_allow_html=True)
         
             elif st.session_state.botones=='Comparar autores más populares por lista':
