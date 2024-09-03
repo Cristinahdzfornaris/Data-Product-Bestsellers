@@ -293,13 +293,14 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                         
                         fig = px.bar(
                             grouped_data, 
-                            x='year', 
-                            y='count', 
+                            y='year', 
+                            x='count', 
                             color='author',
                             barmode='group',
+                            orientation='h',
                             title='Número de Bestsellers por Autor y Año'
                         )
-                        fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
+                        fig.update_layout(yaxis_title='Año', xaxis_title='Número de Bestsellers')
                         st.plotly_chart(fig)
                         st.write(filrados_datos)
                     else:
@@ -339,7 +340,9 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                                 y='count', 
                                 color='author',
                                 barmode='group',
-                                title='Número de Bestsellers por Autor y Año (Filtro Adicional)'
+                                
+                                title='Número de Bestsellers por Autor y Año (Filtro Adicional)',
+                                
                             )
                             
                             fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
@@ -376,7 +379,7 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                         )
                         fig.update_layout(xaxis_title='Año', yaxis_title='Número de Bestsellers')
                         # st.plotly_chart(fig)
-                        
+                        st.info("Para mejor visualización rotar la pantalla")
                         fig = px.pie(
                                 top_authors, 
                                 values='count', 
@@ -384,6 +387,7 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                                 title='Proporción de Bestsellers por Autor',
                                 color_discrete_sequence=px.colors.sequential.RdBu
                             )
+                        
                         st.plotly_chart(fig)
                         dataframe=datos_filtrados.drop(columns=['price',"list_name_encoded"])
                         st.write(dataframe)
@@ -412,27 +416,20 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                         if not editorials_by_year.empty:
                             fig = px.bar(
                                 editorials_by_year,
-                                x='year',
-                                y='count',
+                                y='year',
+                                x='count',
                                 color='publisher',
-                            
+                                orientation='h',
                                 title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
                                 barmode='stack'
                             )
-                            fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
+                            fig.update_layout(yaxis_title='Año', xaxis_title='Número de Publicaciones')
                             st.plotly_chart(fig)
-                            fig = px.area(
-                                editorials_by_year,
-                                x='year',
-                                y='count',
-                                color='publisher',
-                                title=f'Editoriales en las que ha publicado {autores} a lo largo de los años',
-                                labels={'count': 'Número de Publicaciones', 'publisher': 'Editorial'},
+                            
                                 
                                 
-                            )
-                            fig.update_layout(xaxis_title='Año', yaxis_title='Número de Publicaciones')
-                            st.plotly_chart(fig)
+                            
+                            
 
                         else:
                             st.write(f"No se encontraron datos de publicaciones para {autores}.")
