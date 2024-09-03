@@ -456,10 +456,12 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
                 pass
         if "edi" in st.session_state:
             if st.session_state.edi=="Analisis":
+                st.info("Rotar la pantalla para mejor visualización")
                 publisher=st.selectbox('selecciona una editorial',editoriales)
                 editoriales_filtradas=datos[datos['publisher']==publisher]
                 st.write(editoriales_filtradas.drop(columns=["price","list_name_encoded"]))
                 editorialgrafica=editoriales_filtradas.groupby(['year',"list_name"]).size().reset_index(name='count')
+                
                 fig = px.bar(
                 editorialgrafica, 
                 x='year', 
