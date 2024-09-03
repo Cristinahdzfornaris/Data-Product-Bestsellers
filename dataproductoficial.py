@@ -258,9 +258,11 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
 
                             grafica=datos_filtrados.groupby(['year','rank','title']).size().reset_index(name='count').sort_values(by='count',ascending=False)
                             grafica1=datos_filtrados.groupby(['list_name']).size().reset_index(name='count').sort_values(by='count',ascending=False)
-                            st.write(grafica1)
-                            mejores_libros(datos_filtrados,['month'],'libros más vendidos')
-                            fig=px.bar(grafica,x='title',y="count",title="libros más vendidos",color="title")
+                            # st.write(grafica1)
+                            # mejores_libros(datos_filtrados,['month'],'libros más vendidos')
+
+                            fig=px.bar(grafica,y='title',x="count",title="libros más vendidos" , orientation="h")
+                            fig.update_layout(yaxis=dict(categoryorder='total ascending'))
                             st.plotly_chart(fig)
                             fig = px.scatter(grafica1, x='count', y='list_name', title=f'Listas donde aparece {selec_authors}', labels={'rank': 'Ranking', 'title': 'Título'})
                             st.plotly_chart(fig)
