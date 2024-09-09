@@ -86,7 +86,7 @@ with streamlit_analytics.track(unsafe_password=st.secrets.bestsellers):
 
     # Llamar a la función para insertar el script
     insert_google_analytics()
-    # Crear una función para cargar los datos
+    
     @st.cache_data
     def cargar_datos(file_path):
         datos = pd.read_csv(file_path, )
